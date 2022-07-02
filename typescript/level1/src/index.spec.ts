@@ -1,4 +1,4 @@
-import { convertArticleArrayToMap, loadInput, main } from './index';
+import { calculateTotalArticlePrice, convertArticleArrayToMap, loadInput, main } from './index';
 import { promises as fs } from 'fs';
 import { Input } from './model/Input';
 import { Article } from './model/Article';
@@ -99,4 +99,15 @@ describe(convertArticleArrayToMap, () => {
     const catalogMap = convertArticleArrayToMap(articlesArray);
     expect(expectedMap).toStrictEqual(catalogMap);
   });
+});
+
+describe(calculateTotalArticlePrice, () => {
+  test("it should calculate total price", () => {
+    const price = 100;
+    const quantity = 2;
+    const expectedTotal = price * quantity;
+    const result = calculateTotalArticlePrice(price, quantity);
+    expect(expectedTotal).toStrictEqual(result);
+  });
+
 });

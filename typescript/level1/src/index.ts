@@ -58,6 +58,17 @@ export function convertArticleArrayToMap(catalog: Article[]): Map<number, Articl
   );
 }
 
+/**
+ * Given price and quantity
+ * Return total price
+ * @param price 
+ * @param quantity 
+ * @returns 
+ */
+export function calculateTotalArticlePrice(price: number, quantity: number): number {
+  return price*quantity;
+}
+
 if (import.meta.url != null && process.argv[1] === fileURLToPath(import.meta.url)) {
   // The script was run directly.
   main();
