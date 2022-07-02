@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import * as process from 'node:process';
 import { promises as fs } from 'fs';
 import { Input } from './model/Input';
+import { Article } from './model/Article';
 
 /**
  * Read json file as input containing :
@@ -13,9 +14,10 @@ import { Input } from './model/Input';
 export async function main() {
   try {
     const inputData: Input = await loadInput("input.json");
-    console.log(inputData);
 
-    // loop through articles
+    // convert list of article as map to ease manipulations
+    const articleCatalogMap: Map<number, Article> = convertArticleArrayToMap(inputData.articles);
+
     // loop through carts
     // calculate total by article
     // calculate total by cart
@@ -40,6 +42,20 @@ export async function loadInput(filename: string): Promise<Input> {
   catch (error) {
     throw error;
   }
+}
+
+/**
+ * Convert Array of Article into Map
+ * Ease finding article when going through list of CartItem
+ * @param catalog 
+ * @returns 
+ */
+export function convertArticleArrayToMap(catalog: Article[]): Map<number, Article> {
+  return new Map(
+    catalog.map(article => {
+      return [article.id, article];
+    }),
+  );
 }
 
 if (import.meta.url != null && process.argv[1] === fileURLToPath(import.meta.url)) {

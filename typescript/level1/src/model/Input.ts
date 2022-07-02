@@ -3,7 +3,7 @@ import { CustomerCart } from "./CustomerCart";
 
 export interface Input {
     
-    articles: Article;
-    
+    articles: Article[];
+
     carts: CustomerCart[];
 }

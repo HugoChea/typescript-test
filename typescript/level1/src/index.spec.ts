@@ -1,7 +1,7 @@
-import { main } from './index.js';
-import { loadInput } from './index.js';
+import { convertArticleArrayToMap, loadInput, main } from './index';
 import { promises as fs } from 'fs';
-import { Input } from './model/Input.js';
+import { Input } from './model/Input';
+import { Article } from './model/Article';
 
 describe(main, () => {
   test("dummy", () => {
@@ -66,4 +66,37 @@ describe(loadInput, () => {
     }
   });
 
+});
+
+describe(convertArticleArrayToMap, () => {
+  test("it should generate Map from array of Article", () => {
+    const articleA: Article = {
+      "id": 1,
+      "name": "water",
+      "price": 100
+    };
+
+    const articleB: Article = {
+      "id": 2,
+      "name": "honey",
+      "price": 200
+    }
+
+    const articlesArray: Article[] = [articleA, articleB];
+    const expectedMap = new Map();
+    expectedMap.set(articleA.id, articleA);
+    expectedMap.set(articleB.id, articleB);
+
+    const catalogMap = convertArticleArrayToMap(articlesArray);
+    expect(expectedMap).toStrictEqual(catalogMap);
+  });
+
+  test("it should generate Map from empty array", () => {
+
+    const articlesArray: Article[] = [];
+    const expectedMap = new Map();
+
+    const catalogMap = convertArticleArrayToMap(articlesArray);
+    expect(expectedMap).toStrictEqual(catalogMap);
+  });
 });
