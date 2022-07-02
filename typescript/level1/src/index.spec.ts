@@ -1,6 +1,7 @@
 import { main } from './index.js';
 import { loadInput } from './index.js';
 import { promises as fs } from 'fs';
+import { Input } from './model/Input.js';
 
 describe(main, () => {
   test("dummy", () => {
@@ -24,7 +25,7 @@ describe(loadInput, () => {
     const validFileText = JSON.stringify(validJSON);
     readFileSpy.mockResolvedValue(validFileText);
     try {
-      let inputData: JSON = await loadInput('input.json');
+      let inputData: Input = await loadInput('input.json');
       expect(readFileSpy).toHaveBeenCalledTimes(1);
       expect(inputData).toStrictEqual(validJSON);
     } catch (error) {
@@ -42,7 +43,7 @@ describe(loadInput, () => {
     jsonParseSpy.mockRejectedValue("SyntaxError: Unexpected end of JSON input")
 
     try {
-      let inputData: JSON = await loadInput('input.json');
+      let inputData: Input = await loadInput('input.json');
       fail('it should not reach here');
     }
     catch (error) {
@@ -56,7 +57,7 @@ describe(loadInput, () => {
   test("it should return an error because file not found", async () => {
     readFileSpy.mockRejectedValue("Error: ENOENT: no such file or directory")
     try {
-      let inputData: JSON = await loadInput('not-found-input.json');
+      let inputData: Input = await loadInput('not-found-input.json');
       fail('it should not reach here');
     }
     catch (error) {

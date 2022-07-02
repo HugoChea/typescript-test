@@ -3,7 +3,9 @@
   "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "moduleResolution": "node",
+    "module": "es2022"
   },
   "include": ["./src"]
 }

@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import * as process from 'node:process';
 import { promises as fs } from 'fs';
+import { Input } from './model/Input';
 
 /**
  * Read json file as input containing :
@@ -11,7 +12,7 @@ import { promises as fs } from 'fs';
  */
 export async function main() {
   try {
-    const inputData: JSON = await loadInput("input.json");
+    const inputData: Input = await loadInput("input.json");
     console.log(inputData);
 
     // loop through articles
@@ -31,7 +32,7 @@ export async function main() {
  * @param filename 
  * @returns 
  */
-export async function loadInput(filename: string) {
+export async function loadInput(filename: string): Promise<Input> {
   try {
     const data = await fs.readFile(filename, "utf8");
     return JSON.parse(data);
