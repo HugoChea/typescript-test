@@ -3915,6 +3915,12 @@ __metadata:
 "tech-challenge-level2@workspace:level2":
   version: 0.0.0-use.local
   resolution: "tech-challenge-level2@workspace:level2"
+  dependencies:
+    "@types/jest": ^28.1.3
+    "@types/node": ^18.0.0
+    es-jest: ^2.0.0
+    jest: ^28.1.2
+    typescript: 4.x
   languageName: unknown
   linkType: soft
 
