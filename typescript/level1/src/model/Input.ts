@@ -1,5 +1,5 @@
-import { Article } from "./Article";
-import { CustomerCart } from "./CustomerCart";
+import { Article } from "./Article.js";
+import { CustomerCart } from "./CustomerCart.js";
 
 export interface Input {
     

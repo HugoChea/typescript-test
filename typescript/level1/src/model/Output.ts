@@ -1,4 +1,4 @@
-import { CheckoutCart } from "./CheckoutCart";
+import { CheckoutCart } from "./CheckoutCart.js";
 
 export interface Output {
     
