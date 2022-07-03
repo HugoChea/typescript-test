@@ -4,6 +4,7 @@ import { Input } from "../model/Input.js";
 import { Output } from "../model/Output.js";
 import { CustomerCart } from "../model/CustomerCart.js";
 import { DeliveryFee } from "../model/DeliveryFee.js";
+import { Discount } from "../model/Discount.js";
 
 export class CartService {
 
@@ -13,10 +14,24 @@ export class CartService {
    * @param catalog 
    * @returns 
    */
-  convertArticleArrayToMap(catalog: Article[]) {
+  convertArticleArrayToMap(catalog: Article[]): Map<number, Article> {
     return new Map(
       catalog.map(article => {
         return [article.id, article];
+      }),
+    );
+  }
+
+  /**
+   * Convert Array of Discount into Map
+   * Ease finding article discount when calculating cart total
+   * @param discount 
+   * @returns 
+   */
+   convertDiscountArrayToMap(discount: Discount[]): Map<number, Discount> {
+    return new Map(
+      discount.map(discount => {
+        return [discount.article_id, discount];
       }),
     );
   }

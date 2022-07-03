@@ -1,10 +1,88 @@
 import { Article } from "../model/Article.js";
 import { CustomerCart } from "../model/CustomerCart.js";
 import { DeliveryFee } from '../model/DeliveryFee.js';
+import { Discount } from "../model/Discount.js";
 import { Output } from "../model/Output.js";
 import { CartService } from "./CartService.js";
 
 const cartService: CartService = new CartService();
+
+describe("convertArticleArrayToMap", () => {
+  test("it should generate Map from array of Article", () => {
+    const articleA: Article = {
+      "id": 1,
+      "name": "water",
+      "price": 100
+    };
+
+    const articleB: Article = {
+      "id": 2,
+      "name": "honey",
+      "price": 200
+    }
+
+    const articlesArray: Article[] = [articleA, articleB];
+    const expectedMap = new Map();
+    expectedMap.set(articleA.id, articleA);
+    expectedMap.set(articleB.id, articleB);
+
+    const catalogMap = cartService.convertArticleArrayToMap(articlesArray);
+    expect(expectedMap).toStrictEqual(catalogMap);
+  });
+
+  test("it should generate Map from empty array", () => {
+
+    const articlesArray: Article[] = [];
+    const expectedMap = new Map();
+
+    const catalogMap = cartService.convertArticleArrayToMap(articlesArray);
+    expect(expectedMap).toStrictEqual(catalogMap);
+  });
+});
+
+describe("convertDiscountArrayToMap", () => {
+  test("it should generate Map from array of Article", () => {
+    const discountA: Discount = {
+      "article_id": 2,
+      "type": "amount",
+      "value": 25
+    };
+
+    const discountB: Discount = {
+      "article_id": 5,
+      "type": "percentage",
+      "value": 30
+    };
+
+    const discountArray: Discount[] = [discountA, discountB];
+    const expectedMap = new Map();
+    expectedMap.set(discountA.article_id, discountA);
+    expectedMap.set(discountA.article_id, discountA);
+
+    const discountMap = cartService.convertDiscountArrayToMap(discountArray);
+    expect(expectedMap).toStrictEqual(discountMap);
+  });
+
+  test("it should generate Map from empty array", () => {
+
+    const discountArray: Discount[] = [];
+    const expectedMap = new Map();
+
+    const discountMap = cartService.convertDiscountArrayToMap(discountArray);
+    expect(expectedMap).toStrictEqual(discountMap);
+  });
+});
+
+describe("calculateTotalArticlePrice", () => {
+  test("it should calculate total price", () => {
+    const price = 100;
+    const quantity = 2;
+    const expectedTotal = price * quantity;
+    const result = cartService.calculateTotalArticlePrice(price, quantity);
+    expect(expectedTotal).toStrictEqual(result);
+  });
+
+});
 
 describe('calculateTotalPriceCart', () => {
 
