@@ -1,4 +1,4 @@
-import { calculateTotalArticlePrice, calculateTotalPriceCart, convertArticleArrayToMap, loadInput, main } from './index';
+import { calculateTotalArticlePrice, calculateTotalPriceCart, convertArticleArrayToMap, generateOutput, loadInput, main } from './index';
 import { promises as fs } from 'fs';
 import { Input } from './model/Input';
 import { Article } from './model/Article';
@@ -177,92 +177,92 @@ describe(calculateTotalPriceCart, () => {
   });
 });
 
-// describe(generateOutput, () => {
-//   const input = {
-//     "articles": [
-//       {
-//         "id": 1,
-//         "name": "water",
-//         "price": 100
-//       },
-//       {
-//         "id": 2,
-//         "name": "honey",
-//         "price": 200
-//       },
-//       {
-//         "id": 3,
-//         "name": "mango",
-//         "price": 400
-//       },
-//       {
-//         "id": 4,
-//         "name": "tea",
-//         "price": 1000
-//       }
-//     ],
-//     "carts": [
-//       {
-//         "id": 1,
-//         "items": [
-//           {
-//             "article_id": 1,
-//             "quantity": 6
-//           },
-//           {
-//             "article_id": 2,
-//             "quantity": 2
-//           },
-//           {
-//             "article_id": 4,
-//             "quantity": 1
-//           }
-//         ]
-//       },
-//       {
-//         "id": 2,
-//         "items": [
-//           {
-//             "article_id": 2,
-//             "quantity": 1
-//           },
-//           {
-//             "article_id": 3,
-//             "quantity": 3
-//           }
-//         ]
-//       },
-//       {
-//         "id": 3,
-//         "items": []
-//       }
-//     ]
-//   };
+describe(generateOutput, () => {
+  const input = {
+    "articles": [
+      {
+        "id": 1,
+        "name": "water",
+        "price": 100
+      },
+      {
+        "id": 2,
+        "name": "honey",
+        "price": 200
+      },
+      {
+        "id": 3,
+        "name": "mango",
+        "price": 400
+      },
+      {
+        "id": 4,
+        "name": "tea",
+        "price": 1000
+      }
+    ],
+    "carts": [
+      {
+        "id": 1,
+        "items": [
+          {
+            "article_id": 1,
+            "quantity": 6
+          },
+          {
+            "article_id": 2,
+            "quantity": 2
+          },
+          {
+            "article_id": 4,
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "items": [
+          {
+            "article_id": 2,
+            "quantity": 1
+          },
+          {
+            "article_id": 3,
+            "quantity": 3
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "items": []
+      }
+    ]
+  };
 
-//   const expectedOutput = {
-//     "carts": [
-//       {
-//         "id": 1,
-//         "total": 2000
-//       },
-//       {
-//         "id": 2,
-//         "total": 1400
-//       },
-//       {
-//         "id": 3,
-//         "total": 0
-//       }
-//     ]
-//   }
+  const expectedOutput = {
+    "carts": [
+      {
+        "id": 1,
+        "total": 2000
+      },
+      {
+        "id": 2,
+        "total": 1400
+      },
+      {
+        "id": 3,
+        "total": 0
+      }
+    ]
+  }
 
-//   test("it should return expected output", () => {
-//     try{
-//       let output: Output = generateOutput(input);
-//       expect(output).toEqual(expectedOutput);
-//     }
-//       catch(error){
-//     }
-//   });
+  test("it should return expected output", () => {
+    try{
+      let output: Output = generateOutput(input);
+      expect(output).toEqual(expectedOutput);
+    }
+      catch(error){
+    }
+  });
 
-// });
+});

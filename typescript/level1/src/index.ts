@@ -4,6 +4,8 @@ import { promises as fs } from 'fs';
 import { Input } from './model/Input';
 import { Article } from './model/Article';
 import { CustomerCart } from './model/CustomerCart';
+import { Output } from './model/Output';
+import { CheckoutCart } from './model/CheckoutCart';
 
 /**
  * Read json file as input containing :
@@ -16,12 +18,8 @@ export async function main() {
   try {
     const inputData: Input = await loadInput("input.json");
 
-    // convert list of article as map to ease manipulations
-    const articleCatalogMap: Map<number, Article> = convertArticleArrayToMap(inputData.articles);
-
-    // loop through carts
-    // calculate total by article
-    // calculate total by cart
+    const output: Output = generateOutput(inputData);
+    console.log(output);
     // generate output and write file
   }
   catch (error) {
@@ -90,6 +88,37 @@ export function calculateTotalPriceCart(articleCatalogMap: Map<number, Article>,
   }
 
   return total;
+}
+
+/**
+ * Given input with article list and customers carts
+ * Generate output data with each carts and their total
+ * @param input 
+ * @returns 
+ */
+export function generateOutput(input: Input): Output {
+
+  const articleCatalogMap: Map<number, Article> = convertArticleArrayToMap(input.articles);
+
+  let allCheckoutCart: CheckoutCart[] = [];
+
+  try{
+    for (const cart of input.carts) {
+      let totalPriceCart = calculateTotalPriceCart(articleCatalogMap, cart);
+
+      let checkoutCart: CheckoutCart = {
+        id: cart.id,
+        total: totalPriceCart
+      };
+      allCheckoutCart.push(checkoutCart);
+    }
+  } catch(error){
+    throw error
+  }
+
+  return {
+    carts: allCheckoutCart
+  }
 }
 
 if (import.meta.url != null && process.argv[1] === fileURLToPath(import.meta.url)) {
