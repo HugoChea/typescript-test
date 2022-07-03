@@ -1,12 +1,14 @@
 import { main } from './index.js';
 import { promises as fs } from 'fs';
 import { CartService } from './services/CartService.js';
+import { FileHelperService } from './services/FileHelperService.js';
 
 describe("main", () => {
   test("it should call all functions", async () => {
 
     let cartService: CartService = new CartService();
-    const loadInputSpy = jest.spyOn(cartService, 'loadInput').mockResolvedValue({
+    let fileHelperService: FileHelperService = new FileHelperService();
+    const loadInputSpy = jest.spyOn(fileHelperService, 'loadInput').mockResolvedValue({
       "articles": [
         {
           "id": 1,
@@ -72,7 +74,7 @@ describe("main", () => {
     // to not write it really
     const writeFileServiceSpy = jest.spyOn(fs, 'writeFile').mockResolvedValue();
 
-    await main(cartService);
+    await main(cartService, fileHelperService);
     expect(loadInputSpy).toHaveBeenCalledTimes(1);
     expect(generateOutputSpy).toHaveBeenCalledTimes(1);
     expect(writeFileServiceSpy).toHaveBeenCalledTimes(1);

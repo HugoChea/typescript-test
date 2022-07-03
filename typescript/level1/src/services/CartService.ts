@@ -8,22 +8,6 @@ import { CustomerCart } from "../model/CustomerCart.js";
 export class CartService {
 
   /**
-   * Take filename string as parameter and read it as utf8 string
-   * Return content as JSON
-   * @param filename 
-   * @returns 
-   */
-  async loadInput(fileName: string) {
-    try {
-      const data = await fs.readFile(fileName, "utf8");
-      return JSON.parse(data);
-    }
-    catch (error) {
-      throw error;
-    }
-  }
-
-  /**
    * Convert Array of Article into Map
    * Ease finding article when going through list of CartItem
    * @param catalog 
@@ -93,12 +77,12 @@ export class CartService {
         allCheckoutCart.push(checkoutCart);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
 
 
     return {
       carts: allCheckoutCart
-    }
+    };
   }
 }
