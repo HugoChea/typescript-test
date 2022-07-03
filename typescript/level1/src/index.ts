@@ -3,6 +3,7 @@ import * as process from 'node:process';
 import { promises as fs } from 'fs';
 import { Input } from './model/Input';
 import { Article } from './model/Article';
+import { CustomerCart } from './model/CustomerCart';
 
 /**
  * Read json file as input containing :
@@ -67,6 +68,28 @@ export function convertArticleArrayToMap(catalog: Article[]): Map<number, Articl
  */
 export function calculateTotalArticlePrice(price: number, quantity: number): number {
   return price*quantity;
+}
+
+/**
+ * Given a customer cart
+ * Calculate total price of the cart based on catalog of articles
+ * @param articleCatalogMap 
+ * @param cart 
+ * @returns 
+ */
+export function calculateTotalPriceCart(articleCatalogMap: Map<number, Article>, cart: CustomerCart): number {
+  let total = 0;
+  for (const item of cart.items) {
+    let article = articleCatalogMap.get(item.article_id)
+    if (article) {
+      total += calculateTotalArticlePrice(article.price, item.quantity)
+    }
+    else{
+      throw 'Article in cart not found';
+    }
+  }
+
+  return total;
 }
 
 if (import.meta.url != null && process.argv[1] === fileURLToPath(import.meta.url)) {
