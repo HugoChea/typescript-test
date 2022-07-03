@@ -1,5 +1,6 @@
 import { Article } from "./Article.js";
 import { CustomerCart } from "./CustomerCart.js";
+import { DeliveryFee } from "./DeliveryFee.js";
 
 export interface Input {
     
@@ -7,4 +8,5 @@ export interface Input {
 
     carts: CustomerCart[];
 
+    delivery_fees: DeliveryFee[];
 }
