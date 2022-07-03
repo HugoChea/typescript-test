@@ -38,12 +38,24 @@ export class CartService {
 
   /**
    * Given price and quantity
+   * If discount taken as parameters
+   * TAke into account possible discount
    * Return total price
    * @param price 
    * @param quantity 
+   * @param discount
    * @returns 
    */
-  calculateTotalArticlePrice(price: number, quantity: number): number {
+  calculateTotalArticlePrice(price: number, quantity: number, discount?: Discount): number {
+    if (discount){
+      if (discount.type === "amount"){
+        return (price - discount.value) * quantity
+      }
+      if (discount.type === "percentage"){
+        let reduction = Math.round(discount.value * price / 100);
+        return (price - reduction) * quantity;
+      }
+    }
     return price * quantity;
   }
 
@@ -54,12 +66,13 @@ export class CartService {
    * @param cart 
    * @returns 
    */
-  calculateTotalPriceCart(articleCatalogMap: Map<number, Article>, cart: CustomerCart): number {
+  calculateTotalPriceCart(articleCatalogMap: Map<number, Article>, discountMap: Map<number, Discount>, cart: CustomerCart): number {
     let total = 0;
     for (const item of cart.items) {
-      let article = articleCatalogMap.get(item.article_id)
+      let article = articleCatalogMap.get(item.article_id);
+      let discount = discountMap.get(item.article_id);
       if (article) {
-        total += this.calculateTotalArticlePrice(article.price, item.quantity)
+        total += this.calculateTotalArticlePrice(article.price, item.quantity, discount);
       }
       else {
         throw 'Article in cart not found';
@@ -104,12 +117,13 @@ export class CartService {
 
     const articleCatalogMap: Map<number, Article> = this.convertArticleArrayToMap(input.articles);
     const deliveryFeeRate: DeliveryFee[] = input.delivery_fees;
+    const discountMap: Map<number, Discount> = this.convertDiscountArrayToMap(input.discounts);
 
     let allCheckoutCart: CheckoutCart[] = [];
 
     try {
       for (const cart of input.carts) {
-        let totalPriceCart = this.calculateTotalPriceCart(articleCatalogMap, cart);
+        let totalPriceCart = this.calculateTotalPriceCart(articleCatalogMap, discountMap, cart);
         totalPriceCart += this.calculateDeliveryFees(totalPriceCart, deliveryFeeRate);
 
         let checkoutCart: CheckoutCart = {

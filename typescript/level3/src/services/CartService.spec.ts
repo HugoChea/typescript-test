@@ -57,7 +57,7 @@ describe("convertDiscountArrayToMap", () => {
     const discountArray: Discount[] = [discountA, discountB];
     const expectedMap = new Map();
     expectedMap.set(discountA.article_id, discountA);
-    expectedMap.set(discountA.article_id, discountA);
+    expectedMap.set(discountB.article_id, discountB);
 
     const discountMap = cartService.convertDiscountArrayToMap(discountArray);
     expect(expectedMap).toStrictEqual(discountMap);
@@ -82,6 +82,20 @@ describe("calculateTotalArticlePrice", () => {
     expect(expectedTotal).toStrictEqual(result);
   });
 
+  test("it should calculate total price with discount percentage", () => {
+    const price = 147;
+    const quantity = 4;
+    const reduction = 15;
+    const expectedTotal = (price-reduction) * quantity;
+    const discount: Discount= {
+      "article_id": 8,
+      "type": "percentage",
+      "value": 10
+    }
+    const result = cartService.calculateTotalArticlePrice(price, quantity, discount);
+    expect(expectedTotal).toStrictEqual(result);
+  });
+
 });
 
 describe('calculateTotalPriceCart', () => {
@@ -100,6 +114,8 @@ describe('calculateTotalPriceCart', () => {
   articleCatalogMap.set(articleA.id, articleA);
   articleCatalogMap.set(articleB.id, articleB);
 
+  const emptyDiscountMap: Map<number, Discount> = new Map();
+
   test("it should calculate correctly with customer cart containing articles", () => {
     const cart: CustomerCart = {
       "id": 1,
@@ -115,8 +131,36 @@ describe('calculateTotalPriceCart', () => {
       ]
     }
 
-    const result = cartService.calculateTotalPriceCart(articleCatalogMap, cart);
+    const result = cartService.calculateTotalPriceCart(articleCatalogMap, emptyDiscountMap, cart);
     expect(result).toStrictEqual(1000);
+  });
+
+  test("it should calculate correctly with customer cart containing articles with discount", () => {
+
+    const discountMap: Map<number, Discount> = new Map();
+    const discountA: Discount= {
+      "article_id": 2,
+      "type": "amount",
+      "value": 25
+    }
+    discountMap.set(discountA.article_id, discountA);
+
+    const cart: CustomerCart = {
+      "id": 1,
+      "items": [
+        {
+          "article_id": 1,
+          "quantity": 6
+        },
+        {
+          "article_id": 2,
+          "quantity": 2
+        }
+      ]
+    }
+
+    const result = cartService.calculateTotalPriceCart(articleCatalogMap, discountMap, cart);
+    expect(result).toStrictEqual(950);
   });
 
   test("it should calculate 0 + 800 if no article in customer cart", () => {
@@ -125,7 +169,7 @@ describe('calculateTotalPriceCart', () => {
       "items": []
     }
 
-    const result = cartService.calculateTotalPriceCart(articleCatalogMap, cart);
+    const result = cartService.calculateTotalPriceCart(articleCatalogMap, emptyDiscountMap, cart);
     expect(result).toStrictEqual(0);
   });
 
@@ -142,7 +186,7 @@ describe('calculateTotalPriceCart', () => {
     }
 
     expect(() => {
-      const result = cartService.calculateTotalPriceCart(emptyCatalogMap, cart);
+      const result = cartService.calculateTotalPriceCart(emptyCatalogMap, emptyDiscountMap, cart);
     }).toThrow('Article in cart not found');
   });
 });
