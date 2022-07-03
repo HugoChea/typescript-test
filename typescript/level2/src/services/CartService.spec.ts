@@ -1,6 +1,6 @@
-import { promises as fs } from 'fs';
 import { Article } from "../model/Article.js";
 import { CustomerCart } from "../model/CustomerCart.js";
+import { DeliveryFee } from '../model/DeliveryFee.js';
 import { Output } from "../model/Output.js";
 import { CartService } from "./CartService.js";
 
@@ -41,7 +41,7 @@ describe('calculateTotalPriceCart', () => {
     expect(result).toStrictEqual(1000);
   });
 
-  test("it should calculate 0 if no article in customer cart", () => {
+  test("it should calculate 0 + 800 if no article in customer cart", () => {
     const cart: CustomerCart = {
       "id": 1,
       "items": []
@@ -128,6 +128,29 @@ describe('generateOutput', () => {
         "id": 3,
         "items": []
       }
+    ],
+    "delivery_fees": [
+      {
+        "eligible_transaction_volume": {
+          "min_price": 0,
+          "max_price": 1000
+        },
+        "price": 800
+      },
+      {
+        "eligible_transaction_volume": {
+          "min_price": 1000,
+          "max_price": 2000
+        },
+        "price": 400
+      },
+      {
+        "eligible_transaction_volume": {
+          "min_price": 2000,
+          "max_price": null
+        },
+        "price": 0
+      }
     ]
   };
 
@@ -155,6 +178,50 @@ describe('generateOutput', () => {
     }
     catch (error) {
     }
+  });
+
+});
+
+
+describe('calculateDeliveryFees', () => {
+
+  const deliveryFeeRate: DeliveryFee[] = [
+    {
+      "eligible_transaction_volume": {
+        "min_price": 0,
+        "max_price": 1000
+      },
+      "price": 800
+    },
+    {
+      "eligible_transaction_volume": {
+        "min_price": 1000,
+        "max_price": 2000
+      },
+      "price": 400
+    },
+    {
+      "eligible_transaction_volume": {
+        "min_price": 2000,
+        "max_price": null
+      },
+      "price": 0
+    }
+  ]
+  
+  test("it should return expected output", () => {
+    const fee = cartService.calculateDeliveryFees(0, deliveryFeeRate);
+    expect(fee).toStrictEqual(800);
+  });
+
+  test("it should return expected output", () => {
+    const fee = cartService.calculateDeliveryFees(1000, deliveryFeeRate);
+    expect(fee).toStrictEqual(400);
+  });
+
+  test("it should return expected output", () => {
+    const fee = cartService.calculateDeliveryFees(2000, deliveryFeeRate);
+    expect(fee).toStrictEqual(0);
   });
 
 });
